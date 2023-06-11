@@ -1,4 +1,4 @@
-import type { Color, Pixel } from './types';
+import type { Color, Pixel } from '../types';
 
 export class Picture {
   width: number;

@@ -1,9 +1,9 @@
-import { elt } from './elt';
+import { createElement } from '../helpers/createElement';
 import { finishLoad } from './finishLoad';
-import { Dispatch } from './types';
+import { Dispatch } from '../types';
 
 export function startLoad(dispatch: Dispatch) {
-  let input = elt<HTMLInputElement>('input', {
+  let input = createElement<HTMLInputElement>('input', {
     type: 'file',
     onchange: (e) => {
       const t = e.target as HTMLInputElement;

@@ -1,6 +1,6 @@
-import { Picture } from '../Picture';
-import { drawPicture } from '../drawPicture';
-import { elt } from '../elt';
+import { Picture } from '../canvas/Picture';
+import { drawPicture } from '../canvas/drawPicture';
+import { createElement } from '../helpers/createElement';
 import type { Control, State } from '../types';
 
 export class SaveButton implements Control {
@@ -8,7 +8,7 @@ export class SaveButton implements Control {
   picture: Picture;
   constructor(state: State) {
     this.picture = state.picture;
-    this.dom = elt<HTMLButtonElement>(
+    this.dom = createElement<HTMLButtonElement>(
       'button',
       {
         onclick: () => this.save(),
@@ -18,9 +18,9 @@ export class SaveButton implements Control {
   }
 
   save() {
-    let canvas = elt<HTMLCanvasElement>('canvas');
+    let canvas = createElement<HTMLCanvasElement>('canvas');
     drawPicture(this.picture, canvas, 1);
-    let link = elt<HTMLAnchorElement>('a', {
+    let link = createElement<HTMLAnchorElement>('a', {
       href: canvas.toDataURL(),
       download: 'pixelart.png',
     });

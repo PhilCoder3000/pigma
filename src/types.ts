@@ -1,4 +1,4 @@
-import type { Picture } from './Picture';
+import type { Picture } from './canvas/Picture';
 
 export type Pixel = {
   x: number;
@@ -24,7 +24,7 @@ export type Position = {
 export type OnDown = (p: Position) => Function | undefined;
 
 export type Config = {
-  tools: any;
+  tools: {[key: string]: Function};
   controls: any;
   dispatch: Dispatch;
 };

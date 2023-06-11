@@ -1,4 +1,4 @@
-export function elt<T extends HTMLElement>(
+export function createElement<T extends HTMLElement>(
   tag: HTMLTag,
   props?: Partial<GlobalEventHandlers & T>,
   ...children: any[]

@@ -1,10 +1,10 @@
-import { elt } from '../elt';
+import { createElement } from '../helpers/createElement';
 import type { Control, Dispatch, State } from '../types';
 
 export class UndoButton implements Control {
   dom: HTMLButtonElement;
   constructor(state: State, { dispatch }: { dispatch: Dispatch }) {
-    this.dom = elt<HTMLButtonElement>(
+    this.dom = createElement<HTMLButtonElement>(
       'button',
       {
         onclick: () => dispatch({ undo: true }),

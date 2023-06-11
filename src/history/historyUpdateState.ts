@@ -1,4 +1,4 @@
-import type { Action, State } from './types';
+import type { Action, State } from '../types';
 
 export function historyUpdateState(state: State, action: Action): State {
   if (action.undo === true) {

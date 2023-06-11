@@ -1,16 +1,16 @@
 import { Picture } from './Picture';
 import { drawPicture } from './drawPicture';
-import { elt } from './elt';
-import type { OnDown } from './types';
+import { createElement } from '../helpers/createElement';
+import type { OnDown } from '../types';
 
-const scale = 10;
+const scale = 2;
 
 export class PictureCanvas {
   dom: HTMLCanvasElement;
   picture: Picture | null = null;
 
   constructor(picture: Picture, onDown: OnDown) {
-    this.dom = elt<HTMLCanvasElement>('canvas', {
+    this.dom = createElement<HTMLCanvasElement>('canvas', {
       onmousedown: (e) => this.mouse(e, onDown),
       ontouchstart: (e) => this.touch(e, onDown),
     });

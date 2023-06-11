@@ -1,15 +1,16 @@
-import { PictureCanvas } from './PictureCanvas';
-import { elt } from './elt';
-import type { State, Control, Config, Position } from './types';
+import { PictureCanvas } from '../canvas/PictureCanvas';
+import { LeftSidebar } from '../controls/left_sidebar/LeftSidebar';
+import { createElement } from '../helpers/createElement';
+import type { State, Config, Position } from '../types';
 
 export class PixelEditor {
   state: State;
   canvas: PictureCanvas;
-  controls: Control[];
   dom: HTMLDivElement;
+  leftSidebar: LeftSidebar;
 
   constructor(state: State, config: Config) {
-    const { tools, controls, dispatch } = config;
+    const { tools, dispatch } = config;
     this.state = state;
 
     this.canvas = new PictureCanvas(state.picture, (position: Position) => {
@@ -20,25 +21,19 @@ export class PixelEditor {
       }
     });
 
-    this.controls = controls.map((Control: any) => new Control(state, config));
-    this.dom = elt<HTMLDivElement>(
+    this.leftSidebar = new LeftSidebar(state, config);
+    
+    this.dom = createElement<HTMLDivElement>(
       'div',
       {},
       this.canvas.dom,
-      elt<HTMLBRElement>('br'),
-      ...this.controls.reduce(
-        (acc: unknown[], cur) => acc.concat(' ', cur.dom),
-        [],
-      ),
-      [],
+      this.leftSidebar.dom,
     );
   }
 
   syncState(state: State) {
     this.state = state;
     this.canvas.syncState(state.picture);
-    for (const control of this.controls) {
-      control.syncState(state);
-    }
+    this.leftSidebar.syncState(state)
   }
 }
