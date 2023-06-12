@@ -33,7 +33,7 @@ export class PixelEditor {
 
   syncState(state: State) {
     this.#state = state;
-    this.canvas.syncState(state.picture);
+    // this.canvas.syncState(state.picture);
     this.leftSidebar.syncState(state)
   }
 

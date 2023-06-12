@@ -3,74 +3,50 @@ import { drawPicture } from './drawPicture';
 import { createElement } from '../helpers/createElement';
 import type { OnDown } from '../types';
 
-const scale = 2;
-
 export class PictureCanvas {
   dom: HTMLCanvasElement;
   picture: Picture | null = null;
+  context: CanvasRenderingContext2D;
+  #startX: number = 0;
+  #startY: number = 0;
 
   constructor(picture: Picture, onDown: OnDown) {
     this.dom = createElement<HTMLCanvasElement>('canvas', {
-      onmousedown: (e) => this.mouse(e, onDown),
-      ontouchstart: (e) => this.touch(e, onDown),
+      width: 500,
+      height: 500,
     });
-    this.syncState(picture);
+
+    this.context = this.dom.getContext('2d')!;
+    const that = this;
+
+    this.dom.addEventListener('mousedown', function (e) {
+      this.addEventListener('mousemove', function({ clientX, clientY }) {
+        that.context.beginPath();
+        that.context.moveTo(that.#startX, that.#startY);
+        that.context.lineTo(clientX, clientY);
+        that.context.stroke();
+        that.#startX = clientX;
+        that.#startY = clientY;
+      });
+      that.#startX = e.clientX;
+      that.#startY = e.clientY;
+    });
+
+    this.dom.addEventListener('mouseup', function (e) {
+      this.removeEventListener('mousemove', that.mousemove);
+    });
   }
 
-  syncState(picture: Picture) {
-    if (this.picture === picture) return;
-    this.picture = picture;
-    drawPicture(this.picture, this.dom, scale);
+  mousemove({ clientX, clientY }: MouseEvent) {
+    this.context.beginPath();
+    this.context.moveTo(this.#startX, this.#startY);
+    this.context.lineTo(clientX, clientY);
+    this.context.stroke();
+    this.#startX = clientX;
+    this.#startY = clientY;
   }
 
-  mouse(e: MouseEvent, onDown: OnDown) {
-    if (e.button !== 0) return;
-    let position = this.pointerPosition(e, this.dom);
-    const onMove = onDown(position);
-    if (!onMove) return;
-
-    const move = (moveEvent: MouseEvent) => {
-      if (moveEvent.buttons === 0) {
-        this.dom.removeEventListener('mousemove', move);
-      } else {
-        let newPosition = this.pointerPosition(moveEvent, this.dom);
-        if (newPosition.x === position.x && newPosition.y === position.y)
-          return;
-        position = newPosition;
-        onMove(newPosition);
-      }
-    };
-
-    this.dom.addEventListener('mousemove', move);
-  }
-
-  touch(e: TouchEvent, onDown: OnDown) {
-    let position = this.pointerPosition(e.touches[0], this.dom);
-    const onMove = onDown(position);
-    e.preventDefault();
-
-    if (!onMove) return;
-
-    let move = (e: TouchEvent) => {
-      let newPosition = this.pointerPosition(e.touches[0], this.dom);
-      if (newPosition.x === position.x && newPosition.y === position.y) return;
-      position = newPosition;
-      onMove(newPosition);
-    };
-    let end = () => {
-      this.dom.removeEventListener('touchmove', move);
-      this.dom.removeEventListener('touchend', end);
-    };
-    this.dom.addEventListener('touchmove', move);
-    this.dom.addEventListener('touchend', end);
-  }
-
-  pointerPosition(position: MouseEvent | Touch, domNode: HTMLElement) {
-    let rect = domNode.getBoundingClientRect();
-
-    return {
-      x: Math.floor((position.clientX - rect.left) / scale),
-      y: Math.floor((position.clientY - rect.top) / scale),
-    };
+  mouseup(e: MouseEvent) {
+    this.dom.removeEventListener('mousemove', this.mousemove);
   }
 }
