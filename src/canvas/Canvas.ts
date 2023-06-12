@@ -3,7 +3,7 @@ import { drawPicture } from './drawPicture';
 import { createElement } from '../helpers/createElement';
 import type { OnDown } from '../types';
 
-export class PictureCanvas {
+export class Canvas {
   dom: HTMLCanvasElement;
   picture: Picture | null = null;
   context: CanvasRenderingContext2D;

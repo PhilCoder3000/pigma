@@ -1,11 +1,11 @@
-import { PictureCanvas } from '../canvas/PictureCanvas';
+import { Canvas } from '../canvas/Canvas';
 import { LeftSidebar } from '../controls/left_sidebar/LeftSidebar';
 import { createElement } from '../helpers/createElement';
 import type { State, Config, Position } from '../types';
 
 export class PixelEditor {
   #state: State;
-  canvas: PictureCanvas;
+  canvas: Canvas;
   dom: HTMLDivElement;
   leftSidebar: LeftSidebar;
 
@@ -13,7 +13,7 @@ export class PixelEditor {
     const { tools, dispatch } = config;
     this.#state = state;
 
-    this.canvas = new PictureCanvas(state.picture, (position: Position) => {
+    this.canvas = new Canvas(state.picture, (position: Position) => {
       let tool = tools[this.#state.tool];
       let onMove = tool(position, this.#state, dispatch);
       if (onMove) {
