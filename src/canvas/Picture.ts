@@ -22,9 +22,11 @@ export class Picture {
 
   draw(pixels: Pixel[]) {
     let copy = this.pixels.slice();
+
     for (const {x, y, color} of pixels) {
       copy[x + y * this.width] = color;
     }
+    
     return new Picture(this.width, this.height, copy);
   }
 }

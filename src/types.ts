@@ -1,4 +1,5 @@
 import type { Picture } from './canvas/Picture';
+import { StateManager } from './state';
 
 export type Pixel = {
   x: number;
@@ -27,6 +28,7 @@ export type Config = {
   tools: {[key: string]: Function};
   controls: any;
   dispatch: Dispatch;
+  stateManager: StateManager
 };
 
 export type State = {

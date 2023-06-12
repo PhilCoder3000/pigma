@@ -9,7 +9,7 @@ export class ToolSelect implements Control {
   label: HTMLParagraphElement;
   isSelectOpen: boolean = false;
 
-  constructor(state: State, { tools, dispatch }: Config) {
+  constructor(state: State, { tools, stateManager }: Config) {
     this.value = state.tool;
     this.select = createElement<HTMLDivElement>(
       'div',
@@ -23,7 +23,10 @@ export class ToolSelect implements Control {
           'p',
           {
             onclick: () => {
-              dispatch({ tool: name });
+              stateManager.dispatch({
+                type: 'SET_TOOL',
+                payload: { tool: name as string },
+              });
               this.select.classList.remove(classes.open);
             },
           },
@@ -50,10 +53,12 @@ export class ToolSelect implements Control {
       this.label,
       this.select,
     );
+
+    stateManager.subscribe('tool', ({ tool }) => {
+      this.value = tool;
+      this.label.textContent = tool;
+    });
   }
 
-  syncState(state: State) {
-    this.value = state.tool;
-    this.label.textContent = state.tool;
-  }
+  syncState() {}
 }

@@ -4,20 +4,20 @@ import { createElement } from '../helpers/createElement';
 import type { State, Config, Position } from '../types';
 
 export class PixelEditor {
-  state: State;
+  #state: State;
   canvas: PictureCanvas;
   dom: HTMLDivElement;
   leftSidebar: LeftSidebar;
 
   constructor(state: State, config: Config) {
     const { tools, dispatch } = config;
-    this.state = state;
+    this.#state = state;
 
     this.canvas = new PictureCanvas(state.picture, (position: Position) => {
-      let tool = tools[this.state.tool];
-      let onMove = tool(position, this.state, dispatch);
+      let tool = tools[this.#state.tool];
+      let onMove = tool(position, this.#state, dispatch);
       if (onMove) {
-        return (pos: Position) => onMove(pos, this.state);
+        return (pos: Position) => onMove(pos, this.#state);
       }
     });
 
@@ -32,8 +32,14 @@ export class PixelEditor {
   }
 
   syncState(state: State) {
-    this.state = state;
+    this.#state = state;
     this.canvas.syncState(state.picture);
     this.leftSidebar.syncState(state)
   }
+
+  
+  get state() : State {
+    return this.#state
+  }
+  
 }

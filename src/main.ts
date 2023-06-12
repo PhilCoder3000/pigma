@@ -1,4 +1,4 @@
-import { ColorSelect } from './controls/ColorSelect';
+import { ColorSelect } from './controls/left_sidebar/items/ColorSelect';
 import { LoadButton } from './controls/LoadButton';
 import { Picture } from './canvas/Picture';
 import { PixelEditor } from './app/PixelEditor';
@@ -12,6 +12,7 @@ import { historyUpdateState } from './history/historyUpdateState';
 import { pick } from './tools/pick';
 import { rectangle } from './tools/rectangle';
 import { State } from './types';
+import { StateManager } from './state';
 
 const startState: State = {
   tool: 'draw',
@@ -35,14 +36,18 @@ function startPixelEditor({
   tools = baseTools,
   controls = BaseControls
 }) {
+  const stateManager = new StateManager(state)
+  
   let app = new PixelEditor(state, {
     tools,
     controls,
     dispatch(action) {
       state = historyUpdateState(state, action);
       app.syncState(state)
-    }
+    },
+    stateManager,
   })
+
 
   return app.dom
 }
