@@ -7,8 +7,11 @@ export class Canvas {
   dom: HTMLCanvasElement;
   picture: Picture | null = null;
   context: CanvasRenderingContext2D;
+
   #startX: number = 0;
   #startY: number = 0;
+
+  mousemoveHandler; 
 
   constructor(picture: Picture, onDown: OnDown) {
     this.dom = createElement<HTMLCanvasElement>('canvas', {
@@ -17,24 +20,19 @@ export class Canvas {
     });
 
     this.context = this.dom.getContext('2d')!;
-    const that = this;
 
-    this.dom.addEventListener('mousedown', function (e) {
-      this.addEventListener('mousemove', function({ clientX, clientY }) {
-        that.context.beginPath();
-        that.context.moveTo(that.#startX, that.#startY);
-        that.context.lineTo(clientX, clientY);
-        that.context.stroke();
-        that.#startX = clientX;
-        that.#startY = clientY;
-      });
-      that.#startX = e.clientX;
-      that.#startY = e.clientY;
-    });
+    this.mousemoveHandler = this.mousemove.bind(this)
+    const mousedown = this.mousedown.bind(this)
+    const mouseup = this.mouseup.bind(this)
 
-    this.dom.addEventListener('mouseup', function (e) {
-      this.removeEventListener('mousemove', that.mousemove);
-    });
+    this.dom.addEventListener('mousedown', mousedown);
+    this.dom.addEventListener('mouseup', mouseup);
+  }
+
+  mousedown(e: MouseEvent) {
+    this.dom.addEventListener('mousemove', this.mousemoveHandler)
+    this.#startX = e.clientX;
+    this.#startY = e.clientY;
   }
 
   mousemove({ clientX, clientY }: MouseEvent) {
@@ -46,7 +44,7 @@ export class Canvas {
     this.#startY = clientY;
   }
 
-  mouseup(e: MouseEvent) {
-    this.dom.removeEventListener('mousemove', this.mousemove);
+  mouseup() {
+    this.dom.removeEventListener('mousemove', this.mousemoveHandler);
   }
 }
