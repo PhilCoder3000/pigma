@@ -1,21 +1,25 @@
-import type { Position, State, Pixel, Dispatch } from '../types';
+import type { Position, Pixel, Tool } from '../types';
 
-export function rectangle(start: Position, state: State, dispatch: Dispatch) {
-  function drawRectangle(pos: Position) {
-    let xStart = Math.min(start.x, pos.x);
-    let yStart = Math.min(start.y, pos.y);
-    let xEnd = Math.max(start.x, pos.x);
-    let yEnd = Math.max(start.y, pos.y)
-
-    let draw: Pixel[] = []
-    for (let y = yStart; y <= yEnd; y++) {
-      for(let x = xStart; x <= xEnd; x++) {
-        draw.push({ x, y, color: state.color})
-      }
-      
+let history: ImageData[] = [];
+let firstMove = true;
+export const rectangle: Tool = (
+  { clientX, clientY },
+  { startX, startY, context, pushHistory, popHistory },
+  updateState,
+) => {
+  if (!firstMove) {
+    const oldData = history.pop()
+    console.log('🚀 ~ file: rectangle.ts:23 ~ firstMove:', firstMove);
+    if (oldData) {
+      console.log('🚀 ~ file: rectangle.ts:13 ~ oldData:', oldData);
+      context.putImageData(oldData, 0, 0)
     }
-    dispatch({ picture: state.picture.draw(draw)})
   }
-  drawRectangle(start)
-  return drawRectangle
-}
+  context.lineWidth = 10;
+  context.strokeRect(startX, startY, clientX - startX, clientY - startY);
+  
+  history.push(context.getImageData(0, 0, 500, 500));
+
+  firstMove = false;
+  // console.log('🚀 ~ file: rectangle.ts:4 ~ history:', history);
+};

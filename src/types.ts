@@ -1,5 +1,4 @@
 import type { Picture } from './canvas/Picture';
-import { StateManager } from './state';
 
 export type Pixel = {
   x: number;
@@ -24,16 +23,20 @@ export type Position = {
 
 export type OnDown = (p: Position) => Function | undefined;
 
+export type ToolData = {
+  label: string;
+  func: Tool;
+}
+
 export type Config = {
-  tools: {[key: string]: Function};
+  tools: ToolData[];
   controls: any;
   dispatch: Dispatch;
-  stateManager: StateManager
 };
 
 export type State = {
   picture: Picture;
-  tool: string;
+  tool: ToolData;
   color: Color;
   done: Picture[];
   doneAt: number;
@@ -43,3 +46,15 @@ export interface Control {
   dom: HTMLElement;
   syncState(state: State): void;
 }
+
+type ToolPosition = {
+  startX: number;
+  startY: number;
+  context: CanvasRenderingContext2D;
+  pushHistory: () => void;
+  popHistory: () => void;
+};
+
+type ToolCallback = (arg: Partial<ToolPosition>) => void;
+
+export type Tool = (e: MouseEvent, position: ToolPosition, cb: ToolCallback) => void;

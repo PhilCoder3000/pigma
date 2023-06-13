@@ -1,7 +1,8 @@
+import type { State, Config } from '../types';
 import { Canvas } from '../canvas/Canvas';
 import { LeftSidebar } from '../controls/left_sidebar/LeftSidebar';
 import { createElement } from '../helpers/createElement';
-import type { State, Config, Position } from '../types';
+import { StateManager } from '../state';
 
 export class PixelEditor {
   #state: State;
@@ -9,25 +10,24 @@ export class PixelEditor {
   dom: HTMLDivElement;
   leftSidebar: LeftSidebar;
 
-  constructor(state: State, config: Config) {
-    const { tools, dispatch } = config;
+  constructor(stateManager: StateManager, state: State, config: Config) {
     this.#state = state;
 
-    this.canvas = new Canvas(state.picture, (position: Position) => {
-      let tool = tools[this.#state.tool];
-      let onMove = tool(position, this.#state, dispatch);
-      if (onMove) {
-        return (pos: Position) => onMove(pos, this.#state);
-      }
-    });
+    this.canvas = new Canvas(stateManager);
 
-    this.leftSidebar = new LeftSidebar(state, config);
+    this.leftSidebar = new LeftSidebar(stateManager, config);
+
+    const button = createElement('button', {
+      textContent: 'undo',
+    })
+    button.addEventListener('click', this.canvas.undo.bind(this.canvas))
     
     this.dom = createElement<HTMLDivElement>(
       'div',
       {},
       this.canvas.dom,
       this.leftSidebar.dom,
+      button
     );
   }
 

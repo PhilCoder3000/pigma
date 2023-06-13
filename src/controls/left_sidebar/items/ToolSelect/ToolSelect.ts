@@ -1,47 +1,80 @@
-import type { Config, Control, State } from '../../../../types';
+import type { Config, Control, ToolData } from '../../../../types';
 import { createElement } from '../../../../helpers/createElement';
 import classes from './ToolSelect.module.scss';
+import { StateManager } from '../../../../state';
 
 export class ToolSelect implements Control {
   dom: HTMLElement;
   select: HTMLDivElement;
-  value: string;
   label: HTMLParagraphElement;
+
   isSelectOpen: boolean = false;
 
-  constructor(state: State, { tools, stateManager }: Config) {
-    this.value = state.tool;
-    this.select = createElement<HTMLDivElement>(
+  constructor(private stateManager: StateManager, { tools }: Config) {
+    this.select = this.#createSelect(tools)
+
+    this.label = this.#createLabel(stateManager.state.tool.label)
+
+    this.dom = this.#createDom()
+
+    this.#subscribe();
+  }
+
+  clickHandler(label: string, func: any) {
+    return () => {
+      this.stateManager.dispatch({
+        type: 'SET_TOOL',
+        payload: {
+          tool: {
+            label,
+            func,
+          },
+        },
+      });
+      this.select.classList.remove(classes.open);
+    };
+  }
+
+  #subscribe() {
+    this.stateManager.subscribe('tool', ({ tool }) => {
+      this.label.textContent = tool.label;
+    });
+  }
+
+  #getToolsParagraph(tools: ToolData[]) {
+    return tools.map(({ label, func }) =>
+      createElement<HTMLParagraphElement>(
+        'p',
+        {
+          onclick: this.clickHandler(label, func),
+        },
+        label,
+      ),
+    );
+  }
+
+  #createSelect(tools: ToolData[]) {
+    return createElement<HTMLDivElement>(
       'div',
       {
         className: this.isSelectOpen
           ? `${classes.select}${classes.open}`
           : classes.select,
       },
-      ...Object.keys(tools).map((name) =>
-        createElement<HTMLParagraphElement>(
-          'p',
-          {
-            onclick: () => {
-              stateManager.dispatch({
-                type: 'SET_TOOL',
-                payload: { tool: name as string },
-              });
-              this.select.classList.remove(classes.open);
-            },
-          },
-          name,
-        ),
-      ),
+      ...this.#getToolsParagraph(tools),
     );
+  }
 
-    this.label = createElement<HTMLParagraphElement>('p', {
-      textContent: this.value,
+  #createLabel(label: string) {
+    return createElement<HTMLParagraphElement>('p', {
+      textContent: label,
       className: classes.tool,
       onclick: () => this.select.classList.toggle(classes.open),
     });
+  }
 
-    this.dom = createElement(
+  #createDom() {
+    return createElement(
       'div',
       {
         className: classes.container,
@@ -53,11 +86,6 @@ export class ToolSelect implements Control {
       this.label,
       this.select,
     );
-
-    stateManager.subscribe('tool', ({ tool }) => {
-      this.value = tool;
-      this.label.textContent = tool;
-    });
   }
 
   syncState() {}

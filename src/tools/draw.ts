@@ -1,9 +1,16 @@
-import type { Dispatch, Position, State } from '../types';
+import type { Tool } from '../types';
 
-export function draw(position: Position, state: State, dispatch: Dispatch) {
-  function drawPixel({ x, y }: Position, state: State) {
-    dispatch({ picture: state.picture.draw([{ x, y, color: state.color }]) });
-  }
-  drawPixel(position, state)
-  return drawPixel
-}
+export const draw: Tool = (
+  { clientX, clientY },
+  { startX, startY, context },
+  updateState,
+) => {
+  context.beginPath();
+  context.moveTo(startX, startY);
+  context.lineTo(clientX, clientY);
+  context.stroke();
+  updateState({
+    startX: clientX,
+    startY: clientY,
+  });
+};

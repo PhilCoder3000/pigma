@@ -1,4 +1,5 @@
 import { createElement } from '../../helpers/createElement';
+import { StateManager } from '../../state';
 import { Config, Control, State } from '../../types';
 import classes from './LeftSidebar.module.scss';
 
@@ -7,8 +8,8 @@ export class LeftSidebar {
   controls: Control[];
 
 
-  constructor(state: State, config: Config) {
-    this.controls = config.controls.map((Control: any) => new Control(state, config));
+  constructor(stateManager: StateManager, config: Config) {
+    this.controls = config.controls.map((Control: any) => new Control(stateManager, config));
 
     this.dom = createElement<HTMLDivElement>(
       'div',
