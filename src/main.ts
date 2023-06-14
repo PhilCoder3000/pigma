@@ -13,6 +13,7 @@ import { pick } from './tools/pick';
 import { rectangle } from './tools/rectangle';
 import { State, Tool, ToolData } from './types';
 import { StateManager } from './state';
+import { LineWidthSelect } from './controls/left_sidebar/items/LineWidthSelect';
 
 const startState: State = {
   tool: {
@@ -23,6 +24,7 @@ const startState: State = {
   picture: Picture.empty(300, 300, '#f0f0f0'),
   done: [],
   doneAt: 0,
+  lineWidth: 3
 };
 
 const baseTools: ToolData[] = [
@@ -36,7 +38,7 @@ const baseTools: ToolData[] = [
   }
 ];
 
-const BaseControls = [ToolSelect, ColorSelect]
+const BaseControls = [ToolSelect, ColorSelect, LineWidthSelect]
 
 function startPixelEditor({
   state = startState,

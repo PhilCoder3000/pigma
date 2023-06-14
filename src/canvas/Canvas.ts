@@ -27,7 +27,7 @@ export class Canvas {
     this.context = this.dom.getContext('2d', {
       willReadFrequently: true,
     })!;
-    
+
     this.history.push(
       this.context.getImageData(0, 0, config.width, config.height),
     );
@@ -36,6 +36,8 @@ export class Canvas {
 
     this.dom.addEventListener('mousedown', this.#mousedown.bind(this));
     this.dom.addEventListener('mouseup', this.#mouseup.bind(this));
+
+    this.#subscribe()
   }
 
   #mousedown(e: MouseEvent) {
@@ -46,14 +48,10 @@ export class Canvas {
   }
 
   #mousemove(e: MouseEvent) {
-    this.stateManager.state.tool.func(
-      e,
-      this,
-      (updateState: ClassState) => {
-        this.startX = updateState.startX || this.startX;
-        this.startY = updateState.startY || this.startY;
-      },
-    );
+    this.stateManager.state.tool.func(e, this, (updateState: ClassState) => {
+      this.startX = updateState.startX || this.startX;
+      this.startY = updateState.startY || this.startY;
+    });
   }
 
   #mouseup() {
@@ -81,5 +79,16 @@ export class Canvas {
 
   undo() {
     this.#popHistory();
+  }
+
+  #subscribe() {
+
+    this.stateManager.subscribe('color', ({ color }) => {
+      this.context.strokeStyle = color;
+    });
+
+    this.stateManager.subscribe('lineWidth', ({ lineWidth }) => {
+      this.context.lineWidth = lineWidth;
+    });
   }
 }

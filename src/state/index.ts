@@ -1,6 +1,6 @@
 import { State } from '../types';
 
-type ActionType = 'SET_TOOL' | 'SET_COLOR';
+type ActionType = 'SET_TOOL' | 'SET_COLOR' | 'SET_LINE_WIDTH';
 
 type Action = {
   type: ActionType;
@@ -16,7 +16,7 @@ export class StateManager {
   subs: Subs;
 
   constructor(state: State) {
-    this.state = {...state};
+    this.state = { ...state };
 
     this.subs = Object.keys(state).reduce(
       (acc, v) => ({ ...acc, [v]: [] }),
@@ -31,11 +31,20 @@ export class StateManager {
           ...this.state,
           ...payload,
         };
-        
+
         this.#runSubs(payload);
 
         break;
       case 'SET_COLOR':
+        this.state = {
+          ...this.state,
+          ...payload,
+        };
+
+        this.#runSubs(payload);
+
+        break;
+      case 'SET_LINE_WIDTH':
         this.state = {
           ...this.state,
           ...payload,
@@ -58,8 +67,9 @@ export class StateManager {
   }
 
   #runSubs(payload: Action['payload']) {
-    Object.keys(payload).forEach((key) =>
-      this.subs[key].forEach((fn) => fn(this.state)),
-    );
+    const keys = Object.keys(payload);
+    if (keys) {
+      keys.forEach((key) => this.subs[key].forEach((fn) => fn(this.state)));
+    }
   }
 }

@@ -40,9 +40,11 @@ export type Config = {
 export type State = {
   picture: Picture;
   tool: ToolData;
-  color: Color;
   done: Picture[];
   doneAt: number;
+
+  color: Color;
+  lineWidth: number;
 };
 
 export interface Control {
