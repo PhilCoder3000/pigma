@@ -46,6 +46,7 @@ export class Canvas {
         startX: this.#startX,
         startY: this.#startY,
         context: this.context,
+        history: this.history,
         pushHistory: this.#pushHistory.bind(this),
         popHistory: this.#popHistory.bind(this),
       },

@@ -51,6 +51,7 @@ type ToolPosition = {
   startX: number;
   startY: number;
   context: CanvasRenderingContext2D;
+  history: ImageData[];
   pushHistory: () => void;
   popHistory: () => void;
 };
