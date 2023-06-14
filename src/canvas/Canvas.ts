@@ -1,5 +1,7 @@
 import { createElement } from '../helpers/createElement';
 import { StateManager } from '../state';
+import { Config } from '../types';
+
 type ClassState = {
   startX?: number;
   startY?: number;
@@ -9,23 +11,26 @@ export class Canvas {
   dom: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
 
-  #startX: number = 0;
-  #startY: number = 0;
+  startX: number = 0;
+  startY: number = 0;
 
   #mousemoveHandler;
 
   history: ImageData[] = [];
 
-  constructor(private stateManager: StateManager) {
+  constructor(public stateManager: StateManager, private config: Config) {
     this.dom = createElement<HTMLCanvasElement>('canvas', {
-      width: 500,
-      height: 500,
+      width: config.width,
+      height: config.height,
     });
 
     this.context = this.dom.getContext('2d', {
-      willReadFrequently: true
+      willReadFrequently: true,
     })!;
-    this.history.push(this.context.getImageData(0, 0, 500, 500));
+    
+    this.history.push(
+      this.context.getImageData(0, 0, config.width, config.height),
+    );
 
     this.#mousemoveHandler = this.#mousemove.bind(this);
 
@@ -34,36 +39,37 @@ export class Canvas {
   }
 
   #mousedown(e: MouseEvent) {
+    this.startX = e.clientX;
+    this.startY = e.clientY;
     this.dom.addEventListener('mousemove', this.#mousemoveHandler);
-    this.#startX = e.clientX;
-    this.#startY = e.clientY;
+    this.#pushHistory();
   }
 
   #mousemove(e: MouseEvent) {
     this.stateManager.state.tool.func(
       e,
-      {
-        startX: this.#startX,
-        startY: this.#startY,
-        context: this.context,
-        history: this.history,
-        pushHistory: this.#pushHistory.bind(this),
-        popHistory: this.#popHistory.bind(this),
-      },
+      this,
       (updateState: ClassState) => {
-        this.#startX = updateState.startX || this.#startX;
-        this.#startY = updateState.startY || this.#startY;
+        this.startX = updateState.startX || this.startX;
+        this.startY = updateState.startY || this.startY;
       },
     );
   }
 
   #mouseup() {
-    this.#pushHistory();
     this.dom.removeEventListener('mousemove', this.#mousemoveHandler);
+    this.history[this.history.length - 1] = this.context.getImageData(
+      0,
+      0,
+      this.config.width,
+      this.config.height,
+    );
   }
 
   #pushHistory() {
-    this.history.push(this.context.getImageData(0, 0, 500, 500));
+    this.history.push(
+      this.context.getImageData(0, 0, this.config.width, this.config.height),
+    );
   }
 
   #popHistory() {

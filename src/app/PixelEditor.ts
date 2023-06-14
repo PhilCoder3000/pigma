@@ -13,7 +13,7 @@ export class PixelEditor {
   constructor(stateManager: StateManager, state: State, config: Config) {
     this.#state = state;
 
-    this.canvas = new Canvas(stateManager);
+    this.canvas = new Canvas(stateManager, config);
 
     this.leftSidebar = new LeftSidebar(stateManager, config);
 

@@ -1,6 +1,6 @@
 import type { Config, Control, ToolData } from '../../../../types';
 import { createElement } from '../../../../helpers/createElement';
-import classes from './ToolSelect.module.scss';
+import styles from './ToolSelect.module.scss';
 import { StateManager } from '../../../../state';
 
 export class ToolSelect implements Control {
@@ -31,7 +31,7 @@ export class ToolSelect implements Control {
           },
         },
       });
-      this.select.classList.remove(classes.open);
+      this.select.classList.remove(styles.open);
     };
   }
 
@@ -58,8 +58,8 @@ export class ToolSelect implements Control {
       'div',
       {
         className: this.isSelectOpen
-          ? `${classes.select}${classes.open}`
-          : classes.select,
+          ? `${styles.select}${styles.open}`
+          : styles.select,
       },
       ...this.#getToolsParagraph(tools),
     );
@@ -68,8 +68,8 @@ export class ToolSelect implements Control {
   #createLabel(label: string) {
     return createElement<HTMLParagraphElement>('p', {
       textContent: label,
-      className: classes.tool,
-      onclick: () => this.select.classList.toggle(classes.open),
+      className: styles.tool,
+      onclick: () => this.select.classList.toggle(styles.open),
     });
   }
 
@@ -77,16 +77,14 @@ export class ToolSelect implements Control {
     return createElement(
       'div',
       {
-        className: classes.container,
+        className: styles.container,
       },
       createElement<HTMLHeadElement>('h5', {
         textContent: 'Инструмент',
-        className: classes.label,
+        className: styles.label,
       }),
       this.label,
       this.select,
     );
   }
-
-  syncState() {}
 }

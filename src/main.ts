@@ -36,7 +36,7 @@ const baseTools: ToolData[] = [
   }
 ];
 
-const BaseControls = [ToolSelect]
+const BaseControls = [ToolSelect, ColorSelect]
 
 function startPixelEditor({
   state = startState,
@@ -52,6 +52,8 @@ function startPixelEditor({
       state = historyUpdateState(state, action);
       app.syncState(state)
     },
+    width: 500,
+    height: 500,
   })
   
   return app.dom

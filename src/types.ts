@@ -1,3 +1,4 @@
+import { Canvas } from './canvas/Canvas';
 import type { Picture } from './canvas/Picture';
 
 export type Pixel = {
@@ -32,6 +33,8 @@ export type Config = {
   tools: ToolData[];
   controls: any;
   dispatch: Dispatch;
+  width: number;
+  height: number;
 };
 
 export type State = {
@@ -44,7 +47,6 @@ export type State = {
 
 export interface Control {
   dom: HTMLElement;
-  syncState(state: State): void;
 }
 
 type ToolPosition = {
@@ -52,10 +54,8 @@ type ToolPosition = {
   startY: number;
   context: CanvasRenderingContext2D;
   history: ImageData[];
-  pushHistory: () => void;
-  popHistory: () => void;
 };
 
 type ToolCallback = (arg: Partial<ToolPosition>) => void;
 
-export type Tool = (e: MouseEvent, position: ToolPosition, cb: ToolCallback) => void;
+export type Tool = (e: MouseEvent, position: Canvas, cb: ToolCallback) => void;
