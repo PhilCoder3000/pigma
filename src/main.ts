@@ -14,53 +14,58 @@ import { rectangle } from './tools/rectangle';
 import { State, Tool, ToolData } from './types';
 import { StateManager } from './state';
 import { LineWidthSelect } from './controls/left_sidebar/items/LineWidthSelect';
+import { circle } from './tools/circle';
 
 const startState: State = {
   tool: {
-    label: 'Draw',
-    func: draw,
+    label: 'Circle',
+    func: circle,
   },
   color: '#000000',
   picture: Picture.empty(300, 300, '#f0f0f0'),
   done: [],
   doneAt: 0,
-  lineWidth: 3
+  lineWidth: 3,
 };
 
 const baseTools: ToolData[] = [
   {
     label: 'Draw',
-    func: draw
+    func: draw,
   },
   {
     label: 'Rectangle',
-    func: rectangle
-  }
+    func: rectangle,
+  },
+  {
+    label: 'Circle',
+    func: circle,
+  },
 ];
 
-const BaseControls = [ToolSelect, ColorSelect, LineWidthSelect]
-const buttons = [UndoButton]
+const BaseControls = [ToolSelect, ColorSelect, LineWidthSelect];
+const buttons = [UndoButton];
 
 function startPixelEditor({
   state = startState,
   tools = baseTools,
-  controls = BaseControls
+  controls = BaseControls,
 }) {
   const stateManager = new StateManager(state);
-  
+
   let app = new PixelEditor(stateManager, state, {
     tools,
     controls,
     buttons,
     dispatch(action) {
       state = historyUpdateState(state, action);
-      app.syncState(state)
+      app.syncState(state);
     },
     width: 500,
     height: 500,
-  })
-  
-  return app.dom
+  });
+
+  return app.dom;
 }
 
 function main() {

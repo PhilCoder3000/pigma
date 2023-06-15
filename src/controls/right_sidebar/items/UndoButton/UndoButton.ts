@@ -1,5 +1,5 @@
 import type { Button } from '~/types';
-import { eventEmitter } from '~/EventEmmiter';
+import { eventEmitter } from '~/EventEmitter';
 import { createElement } from '~/helpers/createElement';
 import styles from './UndoButton.module.scss'
 

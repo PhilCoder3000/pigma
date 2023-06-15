@@ -1,7 +1,7 @@
-import { eventEmitter } from '~/EventEmmiter';
+import type { Config } from '~/types';
+import { eventEmitter } from '~/EventEmitter';
 import { createElement } from '~/helpers/createElement';
 import { StateManager } from '~/state';
-import { Config } from '~/types';
 
 type ClassState = {
   startX?: number;
@@ -66,7 +66,6 @@ export class Canvas {
   }
 
   #pushHistory() {
-    console.log(this.history.length)
     this.history.push(
       this.context.getImageData(0, 0, this.config.width, this.config.height),
     );
