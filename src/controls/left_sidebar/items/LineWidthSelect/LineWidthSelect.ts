@@ -1,7 +1,7 @@
-import type { Control } from '../../../../types';
-import { createElement } from '../../../../helpers/createElement';
+import type { Control } from '~/types';
 import styles from './LineWidthSelect.module.scss';
-import { StateManager } from '../../../../state';
+import { StateManager } from '~/state';
+import { createElement } from '~/helpers/createElement';
 
 export class LineWidthSelect implements Control {
   dom: HTMLElement;

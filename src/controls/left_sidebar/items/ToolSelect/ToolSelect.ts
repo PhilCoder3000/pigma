@@ -1,7 +1,7 @@
-import type { Config, Control, ToolData } from '../../../../types';
-import { createElement } from '../../../../helpers/createElement';
+import type { Config, Control, ToolData } from '~/types';
+import { createElement } from '~/helpers/createElement';
 import styles from './ToolSelect.module.scss';
-import { StateManager } from '../../../../state';
+import { StateManager } from '~/state';
 
 export class ToolSelect implements Control {
   dom: HTMLElement;

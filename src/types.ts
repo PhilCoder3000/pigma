@@ -31,7 +31,8 @@ export type ToolData = {
 
 export type Config = {
   tools: ToolData[];
-  controls: any;
+  controls: any[];
+  buttons: any[]
   dispatch: Dispatch;
   width: number;
   height: number;
@@ -61,3 +62,7 @@ type ToolPosition = {
 type ToolCallback = (arg: Partial<ToolPosition>) => void;
 
 export type Tool = (e: MouseEvent, position: Canvas, cb: ToolCallback) => void;
+
+export type Button = {
+  dom: HTMLElement
+}

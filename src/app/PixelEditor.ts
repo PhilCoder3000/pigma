@@ -3,12 +3,14 @@ import { Canvas } from '../canvas/Canvas';
 import { LeftSidebar } from '../controls/left_sidebar/LeftSidebar';
 import { createElement } from '../helpers/createElement';
 import { StateManager } from '../state';
+import { RightSidebar } from '~/controls/right_sidebar/RightSidebar';
 
 export class PixelEditor {
   #state: State;
   canvas: Canvas;
   dom: HTMLDivElement;
   leftSidebar: LeftSidebar;
+  rightSidebar: RightSidebar
 
   constructor(stateManager: StateManager, state: State, config: Config) {
     this.#state = state;
@@ -16,25 +18,19 @@ export class PixelEditor {
     this.canvas = new Canvas(stateManager, config);
 
     this.leftSidebar = new LeftSidebar(stateManager, config);
+    this.rightSidebar = new RightSidebar(stateManager, config)
 
-    const button = createElement('button', {
-      textContent: 'undo',
-    })
-    button.addEventListener('click', this.canvas.undo.bind(this.canvas))
-    
     this.dom = createElement<HTMLDivElement>(
       'div',
       {},
       this.canvas.dom,
       this.leftSidebar.dom,
-      button
+      this.rightSidebar.dom,
     );
   }
 
   syncState(state: State) {
     this.#state = state;
-    // this.canvas.syncState(state.picture);
-    this.leftSidebar.syncState(state)
   }
 
   

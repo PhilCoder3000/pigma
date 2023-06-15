@@ -1,6 +1,6 @@
-import type { Color, Control } from '../../../../types';
-import { createElement } from '../../../../helpers/createElement';
-import { StateManager } from '../../../../state';
+import type { Color, Control } from '~/types';
+import { createElement } from '~/helpers/createElement';
+import { StateManager } from '~/state';
 import styles from './ColorSelect.module.scss'
 
 export class ColorSelect implements Control {

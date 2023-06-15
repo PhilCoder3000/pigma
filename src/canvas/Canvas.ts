@@ -1,6 +1,7 @@
-import { createElement } from '../helpers/createElement';
-import { StateManager } from '../state';
-import { Config } from '../types';
+import { eventEmitter } from '~/EventEmmiter';
+import { createElement } from '~/helpers/createElement';
+import { StateManager } from '~/state';
+import { Config } from '~/types';
 
 type ClassState = {
   startX?: number;
@@ -37,7 +38,7 @@ export class Canvas {
     this.dom.addEventListener('mousedown', this.#mousedown.bind(this));
     this.dom.addEventListener('mouseup', this.#mouseup.bind(this));
 
-    this.#subscribe()
+    this.#subscribe();
   }
 
   #mousedown(e: MouseEvent) {
@@ -65,6 +66,7 @@ export class Canvas {
   }
 
   #pushHistory() {
+    console.log(this.history.length)
     this.history.push(
       this.context.getImageData(0, 0, this.config.width, this.config.height),
     );
@@ -77,18 +79,17 @@ export class Canvas {
     }
   }
 
-  undo() {
-    this.#popHistory();
-  }
-
   #subscribe() {
-
     this.stateManager.subscribe('color', ({ color }) => {
       this.context.strokeStyle = color;
     });
 
     this.stateManager.subscribe('lineWidth', ({ lineWidth }) => {
       this.context.lineWidth = lineWidth;
+    });
+
+    eventEmitter.subscribe('pop_history', () => {
+      this.#popHistory();
     });
   }
 }

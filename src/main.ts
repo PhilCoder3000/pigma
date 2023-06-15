@@ -4,7 +4,7 @@ import { Picture } from './canvas/Picture';
 import { PixelEditor } from './app/PixelEditor';
 import { SaveButton } from './controls/SaveButton';
 import { ToolSelect } from './controls/left_sidebar/items/ToolSelect';
-import { UndoButton } from './controls/UndoButton';
+import { UndoButton } from './controls/right_sidebar/items/UndoButton';
 import './app/styles/index.css';
 import { draw } from './tools/draw';
 import { fill } from './tools/fill';
@@ -39,6 +39,7 @@ const baseTools: ToolData[] = [
 ];
 
 const BaseControls = [ToolSelect, ColorSelect, LineWidthSelect]
+const buttons = [UndoButton]
 
 function startPixelEditor({
   state = startState,
@@ -50,6 +51,7 @@ function startPixelEditor({
   let app = new PixelEditor(stateManager, state, {
     tools,
     controls,
+    buttons,
     dispatch(action) {
       state = historyUpdateState(state, action);
       app.syncState(state)

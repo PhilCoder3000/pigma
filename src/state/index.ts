@@ -12,13 +12,13 @@ type Sub = (s: State) => void;
 type Subs = Record<keyof State, Array<Sub>>;
 
 export class StateManager {
-  state: State;
-  subs: Subs;
+  #state: State;
+  #stateChangeSubs: Subs;
 
   constructor(state: State) {
-    this.state = { ...state };
+    this.#state = { ...state };
 
-    this.subs = Object.keys(state).reduce(
+    this.#stateChangeSubs = Object.keys(state).reduce(
       (acc, v) => ({ ...acc, [v]: [] }),
       {} as Subs,
     );
@@ -27,8 +27,8 @@ export class StateManager {
   dispatch({ type, payload }: Action) {
     switch (type) {
       case 'SET_TOOL':
-        this.state = {
-          ...this.state,
+        this.#state = {
+          ...this.#state,
           ...payload,
         };
 
@@ -36,8 +36,8 @@ export class StateManager {
 
         break;
       case 'SET_COLOR':
-        this.state = {
-          ...this.state,
+        this.#state = {
+          ...this.#state,
           ...payload,
         };
 
@@ -45,8 +45,8 @@ export class StateManager {
 
         break;
       case 'SET_LINE_WIDTH':
-        this.state = {
-          ...this.state,
+        this.#state = {
+          ...this.#state,
           ...payload,
         };
 
@@ -59,17 +59,25 @@ export class StateManager {
   }
 
   subscribe(key: keyof State, func: Sub) {
-    this.subs[key].push(func);
+    this.#stateChangeSubs[key].push(func);
   }
 
   unsubscribe(key: keyof State, func: Sub) {
-    this.subs[key] = this.subs[key].filter((f) => f !== func);
+    this.#stateChangeSubs[key] = this.#stateChangeSubs[key].filter(
+      (f) => f !== func,
+    );
   }
 
   #runSubs(payload: Action['payload']) {
     const keys = Object.keys(payload);
     if (keys) {
-      keys.forEach((key) => this.subs[key].forEach((fn) => fn(this.state)));
+      keys.forEach((key) =>
+        this.#stateChangeSubs[key].forEach((fn) => fn(this.#state)),
+      );
     }
+  }
+
+  get state() {
+    return this.#state;
   }
 }
