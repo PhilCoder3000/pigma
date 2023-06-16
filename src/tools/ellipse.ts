@@ -1,16 +1,18 @@
 import { Tool } from '~/types';
 
-export const circle: Tool = (
+export const ellipse: Tool = (
   { clientX, clientY },
-  { startX, startY, context, history, stateManager },
+  { context, startX, startY, history, stateManager },
 ) => {
   context.putImageData(history[history.length - 1], 0, 0);
 
   context.beginPath();
-  context.arc(
+  context.ellipse(
     startX + Math.abs(clientX - startX) / 2,
     startY + Math.abs(clientY - startY) / 2,
-    Math.abs((clientX - startX) + (clientY - startY)) / 4,
+    Math.abs(clientY - startY) / 2,
+    Math.abs(clientX - startX) / 2,
+    Math.PI / 2,
     0,
     2 * Math.PI,
   );

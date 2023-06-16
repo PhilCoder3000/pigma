@@ -10,7 +10,10 @@ export const rectangle: Tool = (
   if (history.length > 1) {
     context.putImageData(localImageData, 0, 0);
   }
-  context.strokeStyle = stateManager.state.color;
-  context.lineWidth = 5;
-  context.strokeRect(startX, startY, clientX - startX, clientY - startY);
+
+  if (stateManager.state.figureType === 'fill') {
+    context.fillRect(startX, startY, clientX - startX, clientY - startY);
+  } else {
+    context.strokeRect(startX, startY, clientX - startX, clientY - startY);
+  }
 };

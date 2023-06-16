@@ -33,7 +33,6 @@ export type Config = {
   tools: ToolData[];
   controls: any[];
   buttons: any[]
-  dispatch: Dispatch;
   width: number;
   height: number;
 };
@@ -46,6 +45,7 @@ export type State = {
 
   color: Color;
   lineWidth: number;
+  figureType: 'stroke' | 'fill'
 };
 
 export interface Control {

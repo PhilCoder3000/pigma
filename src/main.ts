@@ -5,16 +5,18 @@ import { PixelEditor } from './app/PixelEditor';
 import { SaveButton } from './controls/SaveButton';
 import { ToolSelect } from './controls/left_sidebar/items/ToolSelect';
 import { UndoButton } from './controls/right_sidebar/items/UndoButton';
+import { FilledSelect } from './controls/left_sidebar/items/FilledSelect';
 import './app/styles/index.css';
-import { draw } from './tools/draw';
+import { pen } from './tools/pen';
 import { fill } from './tools/fill';
 import { historyUpdateState } from './history/historyUpdateState';
 import { pick } from './tools/pick';
 import { rectangle } from './tools/rectangle';
-import { State, Tool, ToolData } from './types';
+import { State, ToolData } from './types';
 import { StateManager } from './state';
 import { LineWidthSelect } from './controls/left_sidebar/items/LineWidthSelect';
 import { circle } from './tools/circle';
+import { ellipse } from './tools/ellipse';
 
 const startState: State = {
   tool: {
@@ -30,8 +32,8 @@ const startState: State = {
 
 const baseTools: ToolData[] = [
   {
-    label: 'Draw',
-    func: draw,
+    label: 'Pen',
+    func: pen,
   },
   {
     label: 'Rectangle',
@@ -41,9 +43,13 @@ const baseTools: ToolData[] = [
     label: 'Circle',
     func: circle,
   },
+  {
+    label: 'Ellipse',
+    func: ellipse
+  }
 ];
 
-const BaseControls = [ToolSelect, ColorSelect, LineWidthSelect];
+const BaseControls = [ToolSelect, FilledSelect, ColorSelect, LineWidthSelect];
 const buttons = [UndoButton];
 
 function startPixelEditor({
@@ -57,12 +63,8 @@ function startPixelEditor({
     tools,
     controls,
     buttons,
-    dispatch(action) {
-      state = historyUpdateState(state, action);
-      app.syncState(state);
-    },
-    width: 500,
-    height: 500,
+    width: 1000,
+    height: 1000,
   });
 
   return app.dom;

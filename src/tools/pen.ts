@@ -1,6 +1,6 @@
 import type { Tool } from '../types';
 
-export const draw: Tool = (
+export const pen: Tool = (
   { clientX, clientY },
   { startX, startY, context },
   updateState,

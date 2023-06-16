@@ -1,6 +1,10 @@
 import { State } from '../types';
 
-type ActionType = 'SET_TOOL' | 'SET_COLOR' | 'SET_LINE_WIDTH';
+type ActionType =
+  | 'SET_TOOL'
+  | 'SET_COLOR'
+  | 'SET_LINE_WIDTH'
+  | 'SET_FIGURE_TYPE';
 
 type Action = {
   type: ActionType;
@@ -45,6 +49,15 @@ export class StateManager {
 
         break;
       case 'SET_LINE_WIDTH':
+        this.#state = {
+          ...this.#state,
+          ...payload,
+        };
+
+        this.#runSubs(payload);
+
+        break;
+      case 'SET_FIGURE_TYPE':
         this.#state = {
           ...this.#state,
           ...payload,
