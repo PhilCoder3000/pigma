@@ -1,14 +1,15 @@
+import type { Button, Config } from '~/types';
 import { StateManager } from 'state'
 import { createElement } from '~/helpers/createElement';
 import styles from './RightSidebar.module.scss'
-import { Button, Config } from '~/types';
+import { Canvas } from '~/canvas/Canvas';
 
 export class RightSidebar {
   dom: HTMLDivElement
   buttons: Button[]
 
-  constructor(stateManager: StateManager, config: Config) {
-    this.buttons = config.buttons.map((Btn: any) => new Btn(stateManager))
+  constructor(_: StateManager, config: Config, canvas: Canvas) {
+    this.buttons = config.buttons.map((Btn: any) => new Btn(canvas))
     this.dom = this.#createDom()
   }
 

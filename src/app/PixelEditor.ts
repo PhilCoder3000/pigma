@@ -18,7 +18,7 @@ export class PixelEditor {
     this.canvas = new Canvas(stateManager, config);
 
     this.leftSidebar = new LeftSidebar(stateManager, config);
-    this.rightSidebar = new RightSidebar(stateManager, config)
+    this.rightSidebar = new RightSidebar(stateManager, config, this.canvas)
 
     this.dom = createElement<HTMLDivElement>(
       'div',

@@ -1,5 +1,5 @@
 import { ColorSelect } from './controls/left_sidebar/items/ColorSelect';
-import { LoadButton } from './controls/LoadButton';
+import { LoadButton } from './controls/right_sidebar/items/LoadButton';
 import { Picture } from './canvas/Picture';
 import { PixelEditor } from './app/PixelEditor';
 import { SaveButton } from './controls/SaveButton';
@@ -56,7 +56,7 @@ const baseTools: ToolData[] = [
 ];
 
 const BaseControls = [ToolSelect, FilledSelect, ColorSelect, LineWidthSelect];
-const buttons = [UndoButton];
+const buttons = [UndoButton, LoadButton];
 
 function startPixelEditor({
   state = startState,
