@@ -17,17 +17,19 @@ import { StateManager } from './state';
 import { LineWidthSelect } from './controls/left_sidebar/items/LineWidthSelect';
 import { circle } from './tools/circle';
 import { ellipse } from './tools/ellipse';
+import { triangle } from './tools/triangle';
 
 const startState: State = {
   tool: {
-    label: 'Circle',
-    func: circle,
+    label: 'Triangle',
+    func: triangle,
   },
   color: '#000000',
   picture: Picture.empty(300, 300, '#f0f0f0'),
   done: [],
   doneAt: 0,
   lineWidth: 3,
+  figureType: 'stroke',
 };
 
 const baseTools: ToolData[] = [
@@ -45,8 +47,12 @@ const baseTools: ToolData[] = [
   },
   {
     label: 'Ellipse',
-    func: ellipse
-  }
+    func: ellipse,
+  },
+  {
+    label: 'Triangle',
+    func: triangle,
+  },
 ];
 
 const BaseControls = [ToolSelect, FilledSelect, ColorSelect, LineWidthSelect];
