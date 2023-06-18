@@ -27,15 +27,17 @@ export type OnDown = (p: Position) => Function | undefined;
 export type ToolData = {
   label: string;
   func: Tool;
-}
+};
 
 export type Config = {
   tools: ToolData[];
   controls: any[];
-  buttons: any[]
+  buttons: any[];
   width: number;
   height: number;
 };
+
+export type FigureType = 'stroke' | 'fill';
 
 export type State = {
   picture: Picture;
@@ -45,7 +47,7 @@ export type State = {
 
   color: Color;
   lineWidth: number;
-  figureType: 'stroke' | 'fill'
+  figureType: FigureType;
 };
 
 export interface Control {
@@ -64,5 +66,5 @@ type ToolCallback = (arg: Partial<ToolPosition>) => void;
 export type Tool = (e: MouseEvent, position: Canvas, cb: ToolCallback) => void;
 
 export type Button = {
-  dom: HTMLElement
-}
+  dom: HTMLElement;
+};
