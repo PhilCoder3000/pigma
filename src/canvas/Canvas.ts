@@ -45,7 +45,7 @@ export class Canvas {
     this.startX = e.clientX;
     this.startY = e.clientY;
     this.dom.addEventListener('mousemove', this.#mousemoveHandler);
-    this.#pushHistory();
+    this.pushHistory();
   }
 
   #mousemove(e: MouseEvent) {
@@ -65,13 +65,13 @@ export class Canvas {
     );
   }
 
-  #pushHistory() {
+  pushHistory() {
     this.history.push(
       this.context.getImageData(0, 0, this.config.width, this.config.height),
     );
   }
 
-  #popHistory() {
+  popHistory() {
     const data = this.history.pop();
     if (data) {
       this.context.putImageData(data, 0, 0);
@@ -88,7 +88,7 @@ export class Canvas {
     });
 
     eventEmitter.subscribe('pop_history', () => {
-      this.#popHistory();
+      this.popHistory();
     });
   }
 }

@@ -2,6 +2,7 @@ import type { Control } from '~/types';
 import { createElement } from '~/helpers/createElement';
 import styles from './LoadButton.module.scss';
 import { Canvas } from '~/canvas/Canvas';
+import { DragNDrop } from '~/controls/drag_n_drop/DragNDrop';
 
 export class LoadButton implements Control {
   dom: HTMLButtonElement;
@@ -28,7 +29,7 @@ export class LoadButton implements Control {
     input.remove();
   }
 
-  async #handleChange(e: Event) {
+  #handleChange(e: Event) {
     const target = e.target as HTMLInputElement;
     const file = target.files && target.files[0];
     if (file) {
@@ -40,7 +41,7 @@ export class LoadButton implements Control {
         img.src = e.target!.result as string;
 
         img.onload = () => {
-          this.canvas.context.drawImage(img, 0, 0);
+          new DragNDrop(this.canvas, img)
         };
       };
     }

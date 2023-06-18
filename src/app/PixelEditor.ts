@@ -5,7 +5,6 @@ import { createElement } from '../helpers/createElement';
 import { StateManager } from '../state';
 import { RightSidebar } from '~/controls/right_sidebar/RightSidebar';
 import styles from './PixelEditor.module.scss';
-import { DragNDrop } from '~/controls/drag_n_drop/DragNDrop';
 
 export class PixelEditor {
   #state: State;
@@ -19,8 +18,6 @@ export class PixelEditor {
 
     this.canvas = new Canvas(stateManager, config);
 
-    const dnd = new DragNDrop(250, 250, 100, 100);
-
     this.leftSidebar = new LeftSidebar(stateManager, config);
     this.rightSidebar = new RightSidebar(stateManager, config, this.canvas);
 
@@ -32,7 +29,6 @@ export class PixelEditor {
       this.canvas.dom,
       this.leftSidebar.dom,
       this.rightSidebar.dom,
-      ...dnd.dots,
     );
   }
 

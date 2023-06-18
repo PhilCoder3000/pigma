@@ -1,5 +1,6 @@
 import { createElement } from '~/helpers/createElement';
 import styles from './DragnDrop.module.scss';
+import { Canvas } from '~/canvas/Canvas';
 
 export class DragNDrop {
   #dotTL: HTMLDivElement;
@@ -11,11 +12,18 @@ export class DragNDrop {
   #offsetX = 0;
   #offsetY = 0;
 
-  constructor(x: number, y: number, width: number, height: number) {
+  constructor(private canvas: Canvas, private image: HTMLImageElement) {
+    const { width, height } = image;
+    const x = 0,
+      y = 0;
     this.#dotTL = this.#createDot(x, y);
-    this.#dotTR = this.#createDot(x + width, y);
-    this.#dotBR = this.#createDot(x + width, y + height);
-    this.#dotBL = this.#createDot(x, y + height);
+    this.#dotTR = this.#createDot(x + height, y);
+    this.#dotBR = this.#createDot(x + height, y + width);
+    this.#dotBL = this.#createDot(x, y + width);
+
+    this.dots.forEach((dot) => document.body.appendChild(dot));
+    canvas.context.drawImage(image, x, y, width, height);
+    canvas.pushHistory();
   }
 
   #createDot(x: number, y: number) {
@@ -64,8 +72,18 @@ export class DragNDrop {
 
   mouseMove(e: MouseEvent) {
     if (this.isDragging) {
-      (e.target as HTMLElement).style.left = e.clientX - this.#offsetX + 'px';
-      (e.target as HTMLElement).style.top = e.clientY - this.#offsetY + 'px';
+      this.canvas.context.putImageData(
+        this.canvas.history[history.length - 1],
+        0,
+        0,
+      );
+
+      const width = e.clientX - this.#offsetX;
+      const height = e.clientY - this.#offsetY;
+      (e.target as HTMLElement).style.left = width + 'px';
+      (e.target as HTMLElement).style.top = height + 'px';
+
+      this.canvas.context.drawImage(this.image, 0, 0, width, height);
     }
   }
 
