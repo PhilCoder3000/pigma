@@ -17,7 +17,7 @@ export class UndoButton implements Button  {
         onclick: () => eventEmitter.dispatch('pop_history'),
         className: styles.button,
       },
-      'Отменить',
+      'Undo',
     );
   }
 }

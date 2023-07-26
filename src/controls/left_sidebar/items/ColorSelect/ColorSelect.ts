@@ -29,7 +29,7 @@ export class ColorSelect implements Control {
       const t = e.target as HTMLInputElement;
       this.stateManager.dispatch({
         type: 'SET_COLOR',
-        payload: { color: t.value as Color },
+        payload: t.value as Color,
       });
     }
   }
