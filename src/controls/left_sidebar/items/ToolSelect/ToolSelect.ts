@@ -25,10 +25,8 @@ export class ToolSelect implements Control {
       this.stateManager.dispatch({
         type: 'SET_TOOL',
         payload: {
-          tool: {
-            label,
-            func,
-          },
+          label,
+          func,
         },
       });
       this.select.classList.remove(styles.open);

@@ -5,6 +5,8 @@
   border: 1px solid red;
   border-radius: 50%;
 
+  transform: translate(-50%, -50%);
+
   cursor: move;
 
   &::before {
